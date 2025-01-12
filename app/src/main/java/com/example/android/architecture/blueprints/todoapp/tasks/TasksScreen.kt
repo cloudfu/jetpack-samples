@@ -75,9 +75,19 @@ fun TasksScreen(
     viewModel: TasksViewModel = hiltViewModel(),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
 ) {
+
+    // topBar：通常是应用程序的顶部栏，用于显示标题、操作按钮等。
+    // bottomBar：可以用作底部导航栏，包含一些导航元素或操作按钮。
+    // floatingActionButton：一个悬浮在屏幕上的操作按钮，一般用于执行主要操作，如添加内容等。
+    // drawerContent：用于显示侧边抽屉的内容，不过在上述代码中，侧边抽屉使用了 ModalNavigationDrawer 而不是 Scaffold 的抽屉部分。
+    // snackbarHost：可以显示简短的通知消息，通常出现在屏幕底部，如显示操作成功或失败的消息。
     Scaffold(
         modifier = modifier.fillMaxSize(),
+
+        // actionMessage，类似于Toast信息告知
         snackbarHost = { SnackbarHost(snackbarHostState) },
+
+        // 主页Header菜单，包括：详情、主页、抽屉页...
         topBar = {
             TasksTopAppBar(
                 openDrawer = openDrawer,
@@ -88,6 +98,8 @@ fun TasksScreen(
                 onRefresh = { viewModel.refresh() }
             )
         },
+
+        // 新增任务按钮
         floatingActionButton = {
             SmallFloatingActionButton(onClick = onAddTask) {
                 Icon(Icons.Filled.Add, stringResource(id = R.string.add_task))

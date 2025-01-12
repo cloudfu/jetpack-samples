@@ -62,11 +62,15 @@ class TodoNavigationActions(private val navController: NavHostController) {
 
     fun navigateToTasks(userMessage: Int = 0) {
         val navigatesFromDrawer = userMessage == 0
+        // 根据route: String，进行页面导航
         navController.navigate(
+
+            // TASKS_SCREEN = "task"
             TASKS_SCREEN.let {
                 if (userMessage != 0) "$it?$USER_MESSAGE_ARG=$userMessage" else it
             }
         ) {
+
             popUpTo(navController.graph.findStartDestination().id) {
                 inclusive = !navigatesFromDrawer
                 saveState = navigatesFromDrawer

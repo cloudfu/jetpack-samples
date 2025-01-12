@@ -66,6 +66,8 @@ fun TasksTopAppBar(
                 Icon(Icons.Filled.Menu, stringResource(id = R.string.open_drawer))
             }
         },
+
+        // 动作菜单：过滤/更多
         actions = {
             FilterTasksMenu(onFilterAllTasks, onFilterActiveTasks, onFilterCompletedTasks)
             MoreTasksMenu(onClearCompletedTasks, onRefresh)

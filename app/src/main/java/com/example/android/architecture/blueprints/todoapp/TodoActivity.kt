@@ -20,6 +20,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.example.android.architecture.blueprints.todoapp.ui.Message
+import com.example.android.architecture.blueprints.todoapp.ui.MessageCard
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -30,8 +32,10 @@ class TodoActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        这样的函数调用通常与实现 “全面屏” 或者 “无边框” 显示效果相关的操作有关，不过具体含义取决于它所在的编程环境和框架
         enableEdgeToEdge()
         setContent {
+//            MessageCard(Message("Hua", "Hello World"))
             TodoTheme {
                 TodoNavGraph()
             }

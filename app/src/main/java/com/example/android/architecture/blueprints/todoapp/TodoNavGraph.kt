@@ -50,25 +50,40 @@ fun TodoNavGraph(
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
     startDestination: String = TodoDestinations.TASKS_ROUTE,
+
+    // navActions，用于后续各个页面的跳转逻辑
+    // remember 函数创建并记住了 navActions 对象
+    // 避免在每次 UI 重组时重新创建该对象，确保了 UI 的性能和一致性
     navActions: TodoNavigationActions = remember(navController) {
         TodoNavigationActions(navController)
     }
 ) {
+    // TODO: 具体含义，为什么一定需要使用by，如果是getValue/setValue
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: startDestination
 
+    // 定义navigation
     NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier
     ) {
+        // NavGraphBuilder.composable
+        // 各个navigation页面定义RouteId
+        // 抽屉页面PageComposable
         composable(
+            // 定义naviPageId和入参数量和类型
             TodoDestinations.TASKS_ROUTE,
             arguments = listOf(
                 navArgument(USER_MESSAGE_ARG) { type = NavType.IntType; defaultValue = 0 }
             )
-        ) { entry ->
-            AppModalDrawer(drawerState, currentRoute, navActions) {
+        ) {
+            // TODO: entry 具体含义
+            entry -> AppModalDrawer(drawerState, currentRoute, navActions) {
+
+                // TODO: TasksScreen 可以理解为 AppModalDrawer 入参content: @Composable () -> Unit
+
+                // 主页：任务列表
                 TasksScreen(
                     userMessage = entry.arguments?.getInt(USER_MESSAGE_ARG)!!,
                     onUserMessageDisplayed = { entry.arguments?.putInt(USER_MESSAGE_ARG, 0) },
@@ -78,11 +93,15 @@ fun TodoNavGraph(
                 )
             }
         }
+
+        // 任务统计
         composable(TodoDestinations.STATISTICS_ROUTE) {
             AppModalDrawer(drawerState, currentRoute, navActions) {
                 StatisticsScreen(openDrawer = { coroutineScope.launch { drawerState.open() } })
             }
         }
+
+        // 任务编辑，新增界面
         composable(
             TodoDestinations.ADD_EDIT_TASK_ROUTE,
             arguments = listOf(
@@ -101,6 +120,8 @@ fun TodoNavGraph(
                 onBack = { navController.popBackStack() }
             )
         }
+
+        //任务详情界面；
         composable(TodoDestinations.TASK_DETAIL_ROUTE) {
             TaskDetailScreen(
                 onEditTask = { taskId ->

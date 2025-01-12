@@ -60,23 +60,37 @@ fun AppModalDrawer(
     content: @Composable () -> Unit
 ) {
     ModalNavigationDrawer(
+        // 抽屉当前状态：开/关
         drawerState = drawerState,
+
+        // 抽屉内容
         drawerContent = {
             AppDrawer(
                 currentRoute = currentRoute,
+
+                // 定义菜单Action，跳转动作；
+                // navigationActions 集和了所有路由跳转action
                 navigateToTasks = { navigationActions.navigateToTasks() },
                 navigateToStatistics = { navigationActions.navigateToStatistics() },
+
+                // 通过协程关闭抽屉
                 closeDrawer = { coroutineScope.launch { drawerState.close() } }
             )
         }
     ) {
+        // 抽屉关闭之后的内容，一般为主界面；
         content()
     }
 }
 
+/***
+ * 抽屉界面布局Layout
+ */
 @Composable
 private fun AppDrawer(
+    // 当前路由名称ID，后面会进行匹配，如果相同则进行选中；
     currentRoute: String,
+
     navigateToTasks: () -> Unit,
     navigateToStatistics: () -> Unit,
     closeDrawer: () -> Unit,
@@ -84,19 +98,31 @@ private fun AppDrawer(
 ) {
     Surface(color = MaterialTheme.colorScheme.background) {
         Column(modifier = modifier.fillMaxSize()) {
+            // PageHead
             DrawerHeader()
+
+            // 抽屉菜单MenuItem
+            // 任务列表：Task List
             DrawerButton(
                 painter = painterResource(id = R.drawable.ic_list),
                 label = stringResource(id = R.string.list_title),
+
                 isSelected = currentRoute == TodoDestinations.TASKS_ROUTE,
+
+                // click action 可以传入多个动作组合
                 action = {
+                    // 入参对象，navigationActions.navigateToTasks()
                     navigateToTasks()
+                    // 入参对象，navigationActions.navigateToStatistics()
                     closeDrawer()
                 }
             )
+
+            // 任务列表：Task List 任务完成度统计
             DrawerButton(
                 painter = painterResource(id = R.drawable.ic_statistics),
                 label = stringResource(id = R.string.statistics_title),
+
                 isSelected = currentRoute == TodoDestinations.STATISTICS_ROUTE,
                 action = {
                     navigateToStatistics()
@@ -133,6 +159,9 @@ private fun DrawerHeader(
     }
 }
 
+/***
+ * 菜单选项Layout MenuItem
+ */
 @Composable
 private fun DrawerButton(
     painter: Painter,

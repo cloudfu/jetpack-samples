@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun TodoTheme(content: @Composable () -> Unit) {
     MaterialTheme(
+        // 浅色模式，定义第一，第二，第三，三种配色方案
         colorScheme = lightColorScheme(
             primary = Color(0xFF263238),
             secondary = Color(0xFF2E7D32),
@@ -17,3 +18,4 @@ fun TodoTheme(content: @Composable () -> Unit) {
         content()
     }
 }
+
